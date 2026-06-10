@@ -1,0 +1,9 @@
+# Large video files
+assets/video/
+
+# Python scripts
+*.py
+
+# OS
+.DS_Store
+Thumbs.db
