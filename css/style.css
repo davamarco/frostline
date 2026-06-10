@@ -923,6 +923,10 @@ p {
   font-size: clamp(2.75rem, 8vw, 5.5rem);
 }
 
+@media (max-width: 600px) {
+  .cta-banner { min-height: 340px; }
+}
+
 
 /* ── 19. Page Banner (interior pages) ────────────────────── */
 
