@@ -998,10 +998,24 @@ p {
 .page-banner--gallery {
   min-height: clamp(500px, 72vh, 900px);
   align-items: center;
+  overflow: hidden;
 }
 
 .page-banner--gallery .page-banner__bg {
   object-position: center 25%;
+  animation: kenburns-right 20s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes kenburns-right {
+  0%   { transform: scale(1)    translate(0, 0);  transform-origin: 84% 50%; }
+  100% { transform: scale(1.25) translateX(20px); transform-origin: right; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-banner--gallery .page-banner__bg {
+    animation: none;
+  }
 }
 
 .page-banner--gallery .page-banner__overlay {
