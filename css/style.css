@@ -1003,7 +1003,7 @@ p {
 
 .page-banner--gallery .page-banner__bg {
   object-position: center 25%;
-  animation: kenburns-right 20s ease-in-out infinite alternate;
+  animation: kenburns-right 10s ease-in-out infinite alternate;
   will-change: transform;
 }
 
