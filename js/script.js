@@ -45,11 +45,19 @@ function closeMobileNav() {
 const siteHeader = document.getElementById('site-header');
 
 if (siteHeader) {
+  /* Threshold = 85% of the hero/banner height so the header stays
+     white-on-dark for the full duration of the opening visual,
+     then switches to dark-on-transparent when white content arrives. */
+  const heroOrBanner = document.querySelector('.hero, .page-banner');
+  const scrollThreshold = heroOrBanner
+    ? Math.round(heroOrBanner.offsetHeight * 0.85)
+    : 60;
+
   function updateHeader() {
-    siteHeader.classList.toggle('scrolled', window.scrollY > 60);
+    siteHeader.classList.toggle('scrolled', window.scrollY > scrollThreshold);
   }
   window.addEventListener('scroll', updateHeader, { passive: true });
-  updateHeader(); /* run once on load in case page is already scrolled */
+  updateHeader();
 }
 
 

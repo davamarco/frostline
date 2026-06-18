@@ -376,60 +376,20 @@ p {
 /* ── 11. Site Header ──────────────────────────────────────── */
 
 .site-header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
-  border-bottom: 1px solid rgba(14, 18, 10, 0.07);
-  transition: box-shadow var(--transition), border-color 0.4s ease;
 }
 
-/* Frosted-glass layer via ::before so the header element itself does NOT
-   create a new containing block for position:fixed children (mobile nav). */
+/* No background — header is always fully transparent */
 .site-header::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity 0.4s ease;
+  display: none;
 }
 
-.site-header.scrolled {
-  box-shadow: 0 2px 24px rgba(14, 18, 10, 0.13);
-}
+/* ── Hero / Banner: white logo + links until scrolled past banner ── */
 
-/* ── Hero / Banner transparent header ────────────────────── */
-
-/* Dark gradient so logo + links stay legible over any video/photo frame */
-.site-header--hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.52), transparent);
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity 0.4s ease;
-}
-
-/* Once scrolled — hide gradient, show frosted glass */
-.site-header--hero.scrolled::after {
-  opacity: 0;
-}
-
-.site-header--hero:not(.scrolled) {
-  border-bottom-color: transparent;
-}
-
-.site-header--hero:not(.scrolled)::before {
-  opacity: 0;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-/* White logo, links, burger on transparent header */
 .site-header--hero:not(.scrolled) .header__logo-img {
   filter: brightness(0) invert(1);
 }
@@ -784,7 +744,10 @@ p {
 .hero__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(14, 18, 10, 0.45);
+  background: linear-gradient(to bottom,
+    rgba(14, 18, 10, 0.62) 0%,
+    rgba(14, 18, 10, 0.38) 35%,
+    rgba(14, 18, 10, 0.32) 100%);
   z-index: 1;
 }
 
@@ -1078,7 +1041,10 @@ p {
 }
 
 .page-banner--gallery .page-banner__overlay {
-  background: rgba(14, 18, 10, 0.18);
+  background: linear-gradient(to bottom,
+    rgba(14, 18, 10, 0.60) 0%,
+    rgba(14, 18, 10, 0.14) 40%,
+    rgba(14, 18, 10, 0.08) 100%);
 }
 
 .page-banner--gallery .page-banner__content {
@@ -1317,10 +1283,11 @@ p {
 /* Full-viewport section: photo bleeds to right edge */
 .contact-section {
   position: relative;
-  min-height: calc(100vh - 84px);
+  min-height: 100svh;
   display: flex;
   align-items: center;
   overflow: hidden;
+  padding-top: calc(var(--space-2xl) + var(--space-l));
 }
 
 /* Info column sits above photo */
