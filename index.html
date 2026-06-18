@@ -24,7 +24,6 @@
         <ul class="nav__list">
           <li><a href="index.html"   class="nav__link active" aria-current="page">Home</a></li>
           <li><a href="pricing.html" class="nav__link">Pricing</a></li>
-          <li><a href="gallery.html" class="nav__link">Gallery</a></li>
           <li><a href="contact.html" class="nav__link">Contact</a></li>
         </ul>
         <a href="#" class="btn nav__cta-mobile js-book">Book Now</a>
@@ -102,9 +101,9 @@
 
         <div class="activities-deck" id="activities-deck">
 
-          <!-- Card 1: Freeride → gallery -->
-          <a href="gallery.html" class="act-card act-card--light"
-             aria-label="Freeride Terrain — view in gallery">
+          <!-- Card 1: Freeride → contact -->
+          <a href="contact.html" class="act-card act-card--light"
+             aria-label="Freeride Terrain — get in touch">
             <div class="act-card__rider" aria-hidden="true">
               <img src="assets/img/rider-freeride.png" alt="" loading="lazy">
             </div>
@@ -130,9 +129,9 @@
             </div>
           </a>
 
-          <!-- Card 3: Snow Park → gallery -->
-          <a href="gallery.html" class="act-card act-card--light"
-             aria-label="Snow Park — view in gallery">
+          <!-- Card 3: Snow Park → contact -->
+          <a href="contact.html" class="act-card act-card--light"
+             aria-label="Snow Park — get in touch">
             <div class="act-card__rider" aria-hidden="true">
               <img src="assets/img/rider-park.png" alt="" loading="lazy">
             </div>
@@ -177,33 +176,94 @@
       </div>
     </section>
 
-    <!-- ── GALLERY TEASER ────────────────────────────────────── -->
-    <section class="section section--white">
+    <!-- ── LIFE ON THE MOUNTAIN (Coverflow Slider) ─────────────── -->
+    <section class="section section--white coverflow-section" aria-label="Photo gallery">
       <div class="container">
         <div class="section-header reveal">
           <h2>Life on the Mountain</h2>
         </div>
-        <div class="grid grid--3 teaser-grid">
+      </div>
 
-          <div class="teaser-item reveal">
-            <img class="teaser-img" src="assets/img/gallery-01.jpg"
-                 alt="Wide panorama of snowy mountain peaks under blue sky" loading="lazy">
+      <div class="coverflow" id="coverflow" role="region" aria-label="Mountain photo slider">
+
+        <div class="coverflow__track" id="coverflow-track">
+
+          <div class="coverflow__slide" role="img" aria-label="Wide panorama of snowy mountain peaks">
+            <div class="coverflow__inner">
+              <img src="assets/img/gallery-01.jpg" alt="Wide panorama of snowy mountain peaks under blue sky" loading="lazy" draggable="false">
+            </div>
           </div>
 
-          <div class="teaser-item reveal">
-            <img class="teaser-img" src="assets/img/gallery-03.jpg"
-                 alt="Cosy wooden ski lodge with snow on the roof and warm lights" loading="lazy">
+          <div class="coverflow__slide" role="img" aria-label="Snowboarder mid-jump at golden hour">
+            <div class="coverflow__inner">
+              <img src="assets/img/gallery-02.jpg" alt="Snowboarder mid-jump with snow spray at golden hour" loading="lazy" draggable="false">
+            </div>
           </div>
 
-          <div class="teaser-item reveal">
-            <img class="teaser-img" src="assets/img/gallery-08.jpg"
-                 alt="Sunset over snowy ski slopes in warm orange light" loading="lazy">
+          <div class="coverflow__slide" role="img" aria-label="Cosy ski lodge exterior">
+            <div class="coverflow__inner">
+              <img src="assets/img/gallery-03.jpg" alt="Cosy wooden ski lodge exterior with snow on the roof and warm lights" loading="lazy" draggable="false">
+            </div>
+          </div>
+
+          <div class="coverflow__slide" role="img" aria-label="Mountain chairlift over snowy slope">
+            <div class="coverflow__inner">
+              <img src="assets/img/gallery-04.jpg" alt="Mountain chairlift over a snowy slope" loading="lazy" draggable="false">
+            </div>
+          </div>
+
+          <div class="coverflow__slide" role="img" aria-label="Snowboard edge cutting through fresh snow">
+            <div class="coverflow__inner">
+              <img src="assets/img/gallery-05.jpg" alt="Close-up of a snowboard edge cutting through fresh snow" loading="lazy" draggable="false">
+            </div>
+          </div>
+
+          <div class="coverflow__slide" role="img" aria-label="Lodge café with mountain view">
+            <div class="coverflow__inner">
+              <img src="assets/img/gallery-06.jpg" alt="Café interior with panoramic window facing snowy mountains" loading="lazy" draggable="false">
+            </div>
+          </div>
+
+          <div class="coverflow__slide" role="img" aria-label="Snowboarder in forest tree run">
+            <div class="coverflow__inner">
+              <img src="assets/img/gallery-07.jpg" alt="Snowboarder riding through a forest tree run" loading="lazy" draggable="false">
+            </div>
+          </div>
+
+          <div class="coverflow__slide" role="img" aria-label="Sunset over snowy ski slopes">
+            <div class="coverflow__inner">
+              <img src="assets/img/gallery-08.jpg" alt="Sunset over snowy ski slopes in warm orange light" loading="lazy" draggable="false">
+            </div>
+          </div>
+
+          <div class="coverflow__slide" role="img" aria-label="Group of friends with snowboards">
+            <div class="coverflow__inner">
+              <img src="assets/img/gallery-09.jpg" alt="Group of friends with snowboards smiling at the top of a slope" loading="lazy" draggable="false">
+            </div>
+          </div>
+
+          <div class="coverflow__slide" role="img" aria-label="Aerial view of ski trails">
+            <div class="coverflow__inner">
+              <img src="assets/img/gallery-10.jpg" alt="Aerial view of ski trails carved into a mountain" loading="lazy" draggable="false">
+            </div>
           </div>
 
         </div>
-        <div class="teaser-cta reveal">
-          <a href="gallery.html" class="btn">View Gallery</a>
-        </div>
+
+        <button class="coverflow__btn coverflow__btn--prev" id="cf-prev" aria-label="Previous photo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="13,4 7,10 13,16"/>
+          </svg>
+        </button>
+
+        <button class="coverflow__btn coverflow__btn--next" id="cf-next" aria-label="Next photo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="7,4 13,10 7,16"/>
+          </svg>
+        </button>
+
       </div>
     </section>
 

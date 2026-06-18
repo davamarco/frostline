@@ -534,3 +534,157 @@ const prefersReducedMotion =
     });
   });
 })();
+
+
+/* ── Coverflow Slider ─────────────────────────────────────── */
+
+(function initCoverflow() {
+  const track = document.getElementById('coverflow-track');
+  if (!track) return;
+
+  const slides = Array.from(track.querySelectorAll('.coverflow__slide'));
+  const prevBtn = document.getElementById('cf-prev');
+  const nextBtn = document.getElementById('cf-next');
+  const total = slides.length;
+  let current = 0;
+  let autoTimer = null;
+  let touchStartX = 0;
+
+  /* Per-breakpoint transform config [offset-0, offset-1, offset-2] */
+  function cfg() {
+    const mobile = window.innerWidth < 640;
+    return mobile
+      ? [
+          { x: 0,   rotY: 0,   scale: 1,    op: 1,    tz: 0    },
+          { x: 160, rotY: 30,  scale: 0.76, op: 0.50, tz: -80  },
+          { x: 290, rotY: 44,  scale: 0.60, op: 0.18, tz: -160 },
+        ]
+      : [
+          { x: 0,   rotY: 0,   scale: 1,    op: 1,    tz: 0    },
+          { x: 300, rotY: 42,  scale: 0.82, op: 0.65, tz: -110 },
+          { x: 555, rotY: 52,  scale: 0.66, op: 0.28, tz: -220 },
+        ];
+  }
+
+  function render() {
+    const c = cfg();
+    slides.forEach((slide, i) => {
+      /* Normalised offset in range -(total/2) … +(total/2) */
+      let offset = ((i - current) % total + total) % total;
+      if (offset > total / 2) offset -= total;
+      const abs   = Math.abs(offset);
+      const sign  = offset >= 0 ? 1 : -1;
+      const level = Math.min(abs, c.length - 1);
+      const conf  = c[level];
+      const hidden = abs >= c.length;
+
+      slide.style.transform =
+        `translate(-50%,-50%) translateX(${sign * conf.x}px) translateZ(${conf.tz}px) rotateY(${sign * -conf.rotY}deg) scale(${conf.scale})`;
+      slide.style.opacity      = hidden ? '0' : conf.op;
+      slide.style.zIndex       = hidden ? '-1' : String(10 - abs);
+      slide.style.pointerEvents = abs === 0 ? 'auto' : 'none';
+      slide.classList.toggle('is-active', abs === 0);
+    });
+  }
+
+  function goTo(idx) {
+    current = ((idx % total) + total) % total;
+    render();
+    /* Reset tilt on all inners */
+    slides.forEach(s => {
+      const inner = s.querySelector('.coverflow__inner');
+      if (inner) inner.style.transform = '';
+    });
+  }
+
+  function goPrev() { goTo(current - 1); }
+  function goNext() { goTo(current + 1); }
+
+  function startAuto() {
+    if (prefersReducedMotion) return;
+    stopAuto();
+    autoTimer = setInterval(goNext, 4000);
+  }
+  function stopAuto() { clearInterval(autoTimer); }
+
+  /* Click side slide to navigate to it */
+  slides.forEach((slide, i) => {
+    slide.addEventListener('click', () => {
+      let offset = ((i - current) % total + total) % total;
+      if (offset > total / 2) offset -= total;
+      if (offset !== 0) { goTo(i); stopAuto(); startAuto(); }
+    });
+  });
+
+  prevBtn && prevBtn.addEventListener('click', () => { goPrev(); stopAuto(); startAuto(); });
+  nextBtn && nextBtn.addEventListener('click', () => { goNext(); stopAuto(); startAuto(); });
+
+  /* Pause autoplay on hover */
+  track.addEventListener('mouseenter', stopAuto);
+  track.addEventListener('mouseleave', startAuto);
+
+  /* Touch swipe */
+  track.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    stopAuto();
+  }, { passive: true });
+
+  track.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) diff > 0 ? goNext() : goPrev();
+    startAuto();
+  }, { passive: true });
+
+  /* Desktop tilt on active card */
+  if (!prefersReducedMotion) {
+    track.addEventListener('mousemove', e => {
+      const active = track.querySelector('.coverflow__slide.is-active');
+      if (!active) return;
+      const inner = active.querySelector('.coverflow__inner');
+      if (!inner) return;
+      const rect = active.getBoundingClientRect();
+      if (e.clientX < rect.left || e.clientX > rect.right ||
+          e.clientY < rect.top  || e.clientY > rect.bottom) {
+        inner.style.transform = '';
+        return;
+      }
+      const x = (e.clientX - rect.left)  / rect.width  - 0.5;
+      const y = (e.clientY - rect.top)   / rect.height - 0.5;
+      inner.style.transform = `perspective(600px) rotateX(${-y * 10}deg) rotateY(${x * 12}deg)`;
+    });
+
+    track.addEventListener('mouseleave', () => {
+      const inner = track.querySelector('.is-active .coverflow__inner');
+      if (inner) inner.style.transform = '';
+    });
+  }
+
+  /* Keyboard navigation */
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('coverflow')) return;
+    if (e.key === 'ArrowLeft')  { goPrev(); stopAuto(); startAuto(); }
+    if (e.key === 'ArrowRight') { goNext(); stopAuto(); startAuto(); }
+  });
+
+  /* IntersectionObserver: fade-in section + kick off autoplay */
+  const section = track.closest('.coverflow-section');
+  if (section) {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          startAuto();
+          obs.unobserve(section);
+        }
+      });
+    }, { threshold: 0.2 });
+    obs.observe(section);
+  } else {
+    startAuto();
+  }
+
+  /* Recalculate on resize */
+  window.addEventListener('resize', render, { passive: true });
+
+  /* Initial render */
+  render();
+})();
