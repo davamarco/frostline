@@ -92,6 +92,18 @@ body {
   background-color: var(--white);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  animation: page-fade-in 0.4s ease both;
+}
+
+body.page-exit {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: none;
+}
+
+@keyframes page-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 
@@ -368,7 +380,7 @@ p {
   top: 0;
   z-index: 1000;
   border-bottom: 1px solid rgba(14, 18, 10, 0.07);
-  transition: box-shadow var(--transition);
+  transition: box-shadow var(--transition), border-color 0.4s ease;
 }
 
 /* Frosted-glass layer via ::before so the header element itself does NOT
@@ -382,10 +394,56 @@ p {
   -webkit-backdrop-filter: blur(14px);
   pointer-events: none;
   z-index: 0;
+  transition: opacity 0.4s ease;
 }
 
 .site-header.scrolled {
   box-shadow: 0 2px 24px rgba(14, 18, 10, 0.13);
+}
+
+/* ── Hero / Banner transparent header ────────────────────── */
+
+/* Dark gradient so logo + links stay legible over any video/photo frame */
+.site-header--hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.52), transparent);
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* Once scrolled — hide gradient, show frosted glass */
+.site-header--hero.scrolled::after {
+  opacity: 0;
+}
+
+.site-header--hero:not(.scrolled) {
+  border-bottom-color: transparent;
+}
+
+.site-header--hero:not(.scrolled)::before {
+  opacity: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* White logo, links, burger on transparent header */
+.site-header--hero:not(.scrolled) .header__logo-img {
+  filter: brightness(0) invert(1);
+}
+
+.site-header--hero:not(.scrolled) .nav__link {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.site-header--hero:not(.scrolled) .nav__link::after {
+  background-color: #fff;
+}
+
+.site-header--hero:not(.scrolled) .burger span {
+  background-color: #fff;
 }
 
 .header__inner {
@@ -414,6 +472,7 @@ p {
   height: 60px;
   width: auto;
   display: block;
+  transition: filter 0.4s ease;
 }
 
 /* Nav */
@@ -488,7 +547,7 @@ p {
   height: 2px;
   background-color: var(--ink);
   border-radius: 2px;
-  transition: transform 0.25s ease, opacity 0.25s ease;
+  transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.4s ease;
   transform-origin: center;
 }
 

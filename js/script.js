@@ -45,9 +45,11 @@ function closeMobileNav() {
 const siteHeader = document.getElementById('site-header');
 
 if (siteHeader) {
-  window.addEventListener('scroll', () => {
+  function updateHeader() {
     siteHeader.classList.toggle('scrolled', window.scrollY > 60);
-  }, { passive: true });
+  }
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  updateHeader(); /* run once on load in case page is already scrolled */
 }
 
 
@@ -499,4 +501,28 @@ const prefersReducedMotion =
   }, { threshold: 0.4 });
 
   observer.observe(el);
+})();
+
+
+/* ── Page Fade Transitions ────────────────────────────────── */
+
+(function initPageTransitions() {
+  if (prefersReducedMotion) return;
+
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href) return;
+    /* Skip anchors, external URLs, mailto, tel */
+    if (href.startsWith('#') || href.startsWith('http') ||
+        href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    /* Only .html internal page links */
+    if (!href.match(/\.html$/)) return;
+
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = href;
+      document.body.classList.add('page-exit');
+      setTimeout(() => { window.location.href = target; }, 320);
+    });
+  });
 })();
